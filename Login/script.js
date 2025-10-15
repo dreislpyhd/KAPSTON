@@ -320,12 +320,11 @@ function handleLoginSubmit(event) {
     const submitButton = form.querySelector('button[type="submit"]');
     showLoadingState(submitButton);
     
-    // Simulate successful login and show OTP modal
-    showNotification('Login successful! Sending OTP...', 'success');
-    openOtpModal();
-    // Reset button state
-    submitButton.innerHTML = 'Login';
-    submitButton.disabled = false;
+    // Simulate successful login and redirect directly
+    showNotification('Login successful! Redirecting...', 'success');
+    setTimeout(() => {
+        window.location.href = 'dashboard.php';
+    }, 1500);
 }
 
 function handleSocialLogin(event) {
