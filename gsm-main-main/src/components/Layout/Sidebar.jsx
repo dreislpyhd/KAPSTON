@@ -1,9 +1,10 @@
 import React from 'react'
-import { Globe, ChevronDown } from 'lucide-react';
+import { ChevronDown, LogOut } from 'lucide-react';
 import sidebarItems from './sidebarItems';
+import gsmLogo from '../../assets/gsm_logo.png';
 
 
-function Sidebar({ collapsed, onPageChange, activeItem }) {
+function Sidebar({ collapsed, onPageChange, activeItem, onLogout }) {
     const [expandedItem, setExpandedItem] = React.useState(new Set([""]));
     const [activeSubItem, setActiveSubItem] = React.useState(null);
 
@@ -24,9 +25,8 @@ function Sidebar({ collapsed, onPageChange, activeItem }) {
                 {/* Logo */}
                 <div className='p-6'>
                     <div className='flex items-center space-x-3'>
-                        <div className='w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center
-                         text-white text-xl font-bold'>
-                            <Globe className='w-6 h-6' />
+                        <div className='w-10 h-10 flex items-center justify-center'>
+                            <img src={gsmLogo} alt="GSM Logo" className='w-10 h-10 object-contain' />
                         </div>
 
                         {!collapsed && (
@@ -101,6 +101,23 @@ function Sidebar({ collapsed, onPageChange, activeItem }) {
                         );
                     })}
                 </nav>
+
+                {/* Logout Button */}
+                <div className='p-4 border-t border-slate-200 dark:border-slate-700'>
+                    <button
+                        onClick={() => {
+                            if (window.confirm('Are you sure you want to logout?')) {
+                                onLogout();
+                            }
+                        }}
+                        className='w-full flex items-center space-x-3 p-2 rounded-xl text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200'
+                    >
+                        <LogOut className='w-5 h-5' />
+                        {!collapsed && (
+                            <span className='text-sm font-medium'>Logout</span>
+                        )}
+                    </button>
+                </div>
             </div>
         </div>
     )

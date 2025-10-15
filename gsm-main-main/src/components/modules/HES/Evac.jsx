@@ -18,13 +18,15 @@ export default function EvacuationResidentsAdmin() {
     contact_number: '',
     last_distribution: '',
     notes: '',
-    zone: ''
+    zone: '',
+    center: '',
+    barangay: ''
   });
 
   // Fetch residents from API
   const fetchResidents = async () => {
     try {
-      const response = await axios.get('http://localhost/gsm-main-main/backend3/api/hes/residents.php');
+      const response = await axios.get('http://localhost:8000/api/hes/residents.php');
       setResidents(response.data);
     } catch (error) {
       console.error('Error fetching residents:', error);
@@ -57,8 +59,20 @@ export default function EvacuationResidentsAdmin() {
 
   // Add new resident via API
   const addNewResident = async () => {
+    // Validate required fields
+    if (!newResident.name || !newResident.zone) {
+      alert('Please fill in Name and Zone (required fields)');
+      return;
+    }
+
     try {
-      await axios.post('http://localhost/gsm-main-main/backend3/api/hes/residents.php', newResident);
+      const response = await axios.post('http://localhost:8000/api/hes/residents.php', newResident, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('Resident added:', response.data);
       setShowAddModal(false);
       setNewResident({
         name: '',
@@ -68,26 +82,46 @@ export default function EvacuationResidentsAdmin() {
         contact_number: '',
         last_distribution: '',
         notes: '',
-        zone: ''
+        zone: '',
+        center: '',
+        barangay: ''
       });
       fetchResidents(); // Refresh the list
       alert('Resident added successfully');
     } catch (error) {
       console.error('Error adding resident:', error);
-      const errorMessage = error.response?.data?.error || error.message;
-      alert('Failed to add resident: ' + errorMessage);
+      if (error.code === 'ERR_NETWORK') {
+        alert('Network Error: Unable to connect to the server. Please make sure your PHP server is running (XAMPP/WAMP) and the backend path is correct.');
+      } else {
+        const errorMessage = error.response?.data?.error || error.message;
+        alert('Failed to add resident: ' + errorMessage);
+      }
     }
   };
 
   // Update resident status via API
   const updateStatus = async (id, newStatus) => {
     try {
-      await axios.put(`http://localhost/gsm-main-main/backend3/api/hes/residents.php?id=${id}`, { status: newStatus });
+      const response = await axios.put(
+        `http://localhost:8000/api/hes/residents.php?id=${id}`, 
+        { status: newStatus },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      console.log('Status update response:', response.data);
       fetchResidents(); // Refresh the list
       alert(`Resident status updated to ${newStatus}`);
     } catch (error) {
       console.error('Error updating resident:', error);
-      alert('Failed to update resident status: ' + error.message);
+      if (error.code === 'ERR_NETWORK') {
+        alert('Network Error: Unable to connect to the server. Please make sure your PHP server is running.');
+      } else {
+        const errorMessage = error.response?.data?.error || error.message;
+        alert('Failed to update resident status: ' + errorMessage);
+      }
     }
   };
 

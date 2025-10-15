@@ -24,7 +24,7 @@ function ToolResource() {
 
   const fetchResources = async () => {
     try {
-      const response = await axios.get('http://localhost/gsm-main-main/backend3/api/coordination/resources.php');
+      const response = await axios.get('http://localhost:8000/api/coordination/resources.php');
       setResources(response.data);
     } catch (error) {
       console.error('Error fetching resources:', error);
@@ -83,9 +83,9 @@ function ToolResource() {
     e.preventDefault();
     try {
       if (isEdit) {
-        await axios.put(`http://localhost/gsm-main-main/backend3/api/coordination/resources.php?id=${currentResource.id}`, form);
+        await axios.put(`http://localhost:8000/api/coordination/resources.php?id=${currentResource.id}`, form);
       } else {
-        await axios.post('http://localhost/gsm-main-main/backend3/api/coordination/resources.php', form);
+        await axios.post('http://localhost:8000/api/coordination/resources.php', form);
       }
       fetchResources();
       setIsModalOpen(false);
@@ -100,7 +100,7 @@ function ToolResource() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this resource?')) {
       try {
-        await axios.delete(`http://localhost/gsm-main-main/backend3/api/coordination/resources.php?id=${id}`);
+        await axios.delete(`http://localhost:8000/api/coordination/resources.php?id=${id}`);
         fetchResources();
       } catch (error) {
         console.error('Error deleting resource:', error);

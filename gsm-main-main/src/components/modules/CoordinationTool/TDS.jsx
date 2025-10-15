@@ -28,7 +28,7 @@ function Training() {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('http://localhost/gsm-main-main/backend3/api/coordination/tds.php');
+      const response = await axios.get('http://localhost:8000/api/coordination/tds.php');
       setEvents(response.data);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -155,9 +155,9 @@ function Training() {
     e.preventDefault();
     try {
       if (isEdit) {
-        await axios.put(`http://localhost/gsm-main-main/backend3/api/coordination/tds.php?id=${currentEvent.id}`, form);
+        await axios.put(`http://localhost:8000/api/coordination/tds.php?id=${currentEvent.id}`, form);
       } else {
-        await axios.post('http://localhost/gsm-main-main/backend3/api/coordination/tds.php', form);
+        await axios.post('http://localhost:8000/api/coordination/tds.php', form);
       }
       fetchEvents();
       setIsModalOpen(false);
@@ -171,7 +171,7 @@ function Training() {
   const handleDelete = async (id) => {
     const eventToDelete = events.find(ev => ev.id === id);
     try {
-        await axios.delete(`http://localhost/gsm-main-main/backend3/api/coordination/tds.php?id=${id}`);
+        await axios.delete(`http://localhost:8000/api/coordination/tds.php?id=${id}`);
       setDeletedEvent(eventToDelete);
       setUndoCountdown(5);
       fetchEvents();
@@ -184,7 +184,7 @@ function Training() {
   const handleUndo = async () => {
     if (deletedEvent) {
       try {
-        await axios.post('http://localhost/gsm-main-main/backend3/api/coordination/tds.php', deletedEvent);
+        await axios.post('http://localhost:8000/api/coordination/tds.php', deletedEvent);
         setDeletedEvent(null);
         setUndoCountdown(0);
         fetchEvents();

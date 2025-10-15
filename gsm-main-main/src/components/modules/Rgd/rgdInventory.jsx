@@ -8,7 +8,7 @@ function RgdInventory() {
   useEffect(() => {
     const fetchInventory = async () => {
       try {
-        const response = await axios.get('http://localhost/gsm-main-main/backend3/api/rgd/inventory.php');
+        const response = await axios.get('http://localhost:8000/api/rgd/inventory.php');
         setInventory(response.data);
       } catch (error) {
         console.error('Error fetching inventory:', error);
@@ -25,7 +25,7 @@ function RgdInventory() {
   // Delete handler
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost/gsm-main-main/backend3/api/rgd/inventory.php?id=${id}`);
+      await axios.delete(`http://localhost:8000/api/rgd/inventory.php?id=${id}`);
       setInventory(inventory.filter(item => item.id !== id));
     } catch (error) {
       console.error('Error deleting item:', error);
@@ -65,16 +65,16 @@ function RgdInventory() {
     try {
       if (isAddModal) {
         // Add new item
-        await axios.post('http://localhost/gsm-main-main/backend3/api/rgd/inventory.php', { ...form, quantity: Number(form.quantity) });
+        await axios.post('http://localhost:8000/api/rgd/inventory.php', { ...form, quantity: Number(form.quantity) });
       } else {
         // Edit existing item
-        await axios.put(`http://localhost/gsm-main-main/backend3/api/rgd/inventory.php?id=${editItem.id}`, { ...form, quantity: Number(form.quantity) });
+        await axios.put(`http://localhost:8000/api/rgd/inventory.php?id=${editItem.id}`, { ...form, quantity: Number(form.quantity) });
       }
       setIsModalOpen(false);
       setEditItem(null);
       setIsAddModal(false);
       // Refresh inventory
-      const response = await axios.get('http://localhost/gsm-main-main/backend3/api/rgd/inventory.php');
+      const response = await axios.get('http://localhost:8000/api/rgd/inventory.php');
       setInventory(response.data);
     } catch (error) {
       console.error('Error saving item:', error);
@@ -99,10 +99,10 @@ function RgdInventory() {
     ];
     try {
       for (const item of sampleData) {
-        await axios.post('http://localhost/gsm-main-main/backend3/api/rgd/inventory.php', item);
+        await axios.post('http://localhost:8000/api/rgd/inventory.php', item);
       }
       // Refresh inventory
-      const response = await axios.get('http://localhost/gsm-main-main/backend3/api/rgd/inventory.php');
+      const response = await axios.get('http://localhost:8000/api/rgd/inventory.php');
       setInventory(response.data);
       alert('Sample data added successfully');
     } catch (error) {

@@ -10,7 +10,7 @@ function Rdt() {
   useEffect(() => {
     const fetchTrackerData = async () => {
       try {
-        const response = await axios.get('http://localhost/gsm-main-main/backend3/api/rgd/tracker.php');
+        const response = await axios.get('http://localhost:8000/api/rgd/tracker.php');
         setDistributionData(response.data);
       } catch (error) {
         console.error('Error fetching tracker data:', error);
@@ -52,10 +52,10 @@ function Rdt() {
     ];
     try {
       for (const item of sampleData) {
-        await axios.post('http://localhost/gsm-main-main/backend3/api/rgd/tracker.php', item);
+        await axios.post('http://localhost:8000/api/rgd/tracker.php', item);
       }
       // Refresh data
-      const response = await axios.get('http://localhost/gsm-main-main/backend3/api/rgd/tracker.php');
+      const response = await axios.get('http://localhost:8000/api/rgd/tracker.php');
       setDistributionData(response.data);
       alert('Sample data added successfully');
     } catch (error) {

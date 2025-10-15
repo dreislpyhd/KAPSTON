@@ -5,13 +5,16 @@ import Dashboard from './components/modules/Dashboard/DashboardOverview'
 import ContentRenderer from './components/ContentRenderer';
 import sidebarItems from './components/Layout/sidebarItems';
 import LandingPage from './components/LandingPage';
+import Login from './components/Login';
 
 
 function App() {
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const handleToggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
-    const [showLandingPage, setShowLandingPage] = React.useState(true);
+    const [showLandingPage, setShowLandingPage] = React.useState(false);
+    const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+    const [user, setUser] = React.useState(null);
     const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
     const [activeItem, setActiveItem] = React.useState('dashboard');
     
@@ -27,7 +30,22 @@ function App() {
         return ['Dashboard'];
     }
 
+    const handleLoginSuccess = (userData) => {
+        setIsAuthenticated(true);
+        setUser(userData);
+        setShowLandingPage(true);
+        // Don't store in localStorage so login is required on refresh
+    };
+
     const handleEnterSystem = () => {
+        setShowLandingPage(false);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('user');
+        setIsAuthenticated(false);
+        setUser(null);
         setShowLandingPage(false);
     };
 
@@ -35,7 +53,12 @@ function App() {
         setShowLandingPage(true);
     };
 
-    // Show landing page if showLandingPage is true
+    // Show login page if NOT authenticated
+    if (!isAuthenticated) {
+        return <Login onLoginSuccess={handleLoginSuccess} />;
+    }
+
+    // Show landing page after login
     if (showLandingPage) {
         return <LandingPage onEnterSystem={handleEnterSystem} />;
     }
@@ -48,6 +71,7 @@ function App() {
                     onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
                     activeItem={activeItem}
                     onPageChange={setActiveItem}
+                    onLogout={handleLogout}
                 />
                 <div className='flex-1 flex flex-col overflow-hidden'>
                     <Header
